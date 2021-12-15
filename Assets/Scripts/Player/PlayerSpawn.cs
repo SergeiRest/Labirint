@@ -7,7 +7,7 @@ public class PlayerSpawn : MonoBehaviour
 	[SerializeField] private Transform _start;
 	[SerializeField] private Transform _finish;
 	[SerializeField] private Player _player;
-	[SerializeField] private UI _uI;
+	[SerializeField] private PlayerShield _shield;
     void Start()
     {
 		Spawn();
@@ -17,6 +17,6 @@ public class PlayerSpawn : MonoBehaviour
 	{
 		var player = Instantiate(_player, _start.position, Quaternion.identity);
 		player.Movement.Init(_start, _finish);
-		_uI.GetPlayer(player);
+		_shield.GetPlayer(player);
 	}
 }

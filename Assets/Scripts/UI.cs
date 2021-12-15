@@ -1,39 +1,43 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI : MonoBehaviour
 {
-	private Player _player;
-	private IEnumerator TimeToDropTheShield()
+	[SerializeField] private RawImage _pausePanel;
+
+	private void Start()
 	{
-		yield return new WaitForSecondsRealtime(2);
-		Debug.Log("Хватит жать");
-		Drop();
+		_pausePanel.gameObject.SetActive(false);
 	}
 
-	public void GetPlayer(Player player)
+	public void Pause()
 	{
-		_player = player;
+		Time.timeScale = 0;
+		FogTheWindow();
 	}
 
-    public void OnDown()
+	private async void FogTheWindow()
 	{
-		_player.States.SetProtectedState();
-		StartCoroutine(TimeToDropTheShield());
+		_pausePanel.gameObject.SetActive(true);
+		Color color = new Color(0, 0, 0, 0);
+		for (float i = 0; i < 1; i += 0.01f)
+		{
+			_pausePanel.color = color;
+			color.a = i;
+			await System.Threading.Tasks.Task.Delay(10);
+		}
 	}
 
-
-	public void OnUp()
+	public void Resume()
 	{
-		Drop();
+		_pausePanel.gameObject.SetActive(false);
+		Time.timeScale = 1;
 	}
 
-	private void Drop()
+	public void Exit()
 	{
-		_player.States.SetBasicState();
+		Application.Quit();
 	}
-
-	
 }
