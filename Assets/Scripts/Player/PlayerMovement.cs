@@ -15,7 +15,8 @@ public class PlayerMovement : MonoBehaviour
 	private async void StartMove()
 	{
 		await System.Threading.Tasks.Task.Delay(2000);
-		_navMeshAgent.isStopped = false;
+		if(_navMeshAgent.isStopped)
+			_navMeshAgent.isStopped = false;
 		_navMeshAgent.SetDestination(_finishPoint.position);
 	}
 
