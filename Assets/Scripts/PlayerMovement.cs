@@ -12,9 +12,10 @@ public class PlayerMovement : MonoBehaviour
 	private NavMeshAgent _navMeshAgent;
 
 
-	private IEnumerator StartMove()
+	private async void StartMove()
 	{
-		yield return new WaitForSecondsRealtime(2);
+		await System.Threading.Tasks.Task.Delay(2000);
+		_navMeshAgent.isStopped = false;
 		_navMeshAgent.SetDestination(_finishPoint.position);
 	}
 
@@ -23,11 +24,18 @@ public class PlayerMovement : MonoBehaviour
 		_navMeshAgent = GetComponent<NavMeshAgent>();
 		_startPoint = startPoint;
 		_finishPoint = finishPoint;
-		StartCoroutine(StartMove());
+		StartMove();
 	}
 
 	public void Return()
 	{
+		gameObject.SetActive(true);
+		transform.position = _startPoint.position;
+		StartMove();
+	}
 
+	public void StopMove()
+	{
+		_navMeshAgent.isStopped = true;
 	}
 }

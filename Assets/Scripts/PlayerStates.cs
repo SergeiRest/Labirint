@@ -13,7 +13,7 @@ public class PlayerStates : MonoBehaviour
 	private void Start()
 	{
 		_renderer = GetComponent<MeshRenderer>();
-		_currentState = SetBasicState();
+		SetBasicState();
 	}
 
 	public BasePlayerStates GetCurrentState()
@@ -21,18 +21,16 @@ public class PlayerStates : MonoBehaviour
 		return _currentState;
 	}
 
-	public BasePlayerStates SetProtectedState()
+	public void SetProtectedState()
 	{
-		var state = new PlayerShieldState(_renderer);
-		state.Start(_shieldMaterial);
-		return state;
+		_currentState = new PlayerShieldState(_renderer);
+		_currentState.Start(_shieldMaterial);
 	}
 
-	public BasePlayerStates SetBasicState()
+	public void SetBasicState()
 	{
-		var state = new PlayerBasicState(_renderer);
-		state.Start(_basicMaterial);
-		return state;
+		_currentState = new PlayerBasicState(_renderer);
+		_currentState.Start(_basicMaterial);
 	}
 
 }

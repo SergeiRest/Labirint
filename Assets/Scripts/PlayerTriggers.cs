@@ -1,13 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerStates))]
+[RequireComponent(typeof(PlayerMovement))]
 public class PlayerTriggers : MonoBehaviour
 {
 	private PlayerStates _states;
+	private PlayerMovement _movement;
+	public delegate void OnPlayerDeath();
+	public OnPlayerDeath PlayerDeath;
 	private void Start()
 	{
+		_movement = GetComponent<PlayerMovement>();
 		_states = GetComponent<PlayerStates>();
 	}
 
@@ -15,12 +21,20 @@ public class PlayerTriggers : MonoBehaviour
 	{
 		if(other.TryGetComponent(out DeathBlock death))
 		{
-			Debug.Log("Попал ты папаша");
-			Debug.Log(_states.GetCurrentState());
 			if (_states.GetCurrentState() is PlayerBasicState)
-				Debug.Log("Абоба");
-			else
-				Debug.Log("Ещё подумай");
+			{
+				Death();
+			}
 		}
+	}
+
+	private async void Death()
+	{
+		_movement.StopMove();
+		PlayerDeath.Invoke();
+		await Task.Delay(200);
+		gameObject.SetActive(false);
+		await Task.Delay(1000);
+		_movement.Return();
 	}
 }
